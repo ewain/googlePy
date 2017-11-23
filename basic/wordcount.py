@@ -2,6 +2,7 @@
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
 # http://www.apache.org/licenses/LICENSE-2.0
+from fileinput import filename
 
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
@@ -38,31 +39,154 @@ print_words() and print_top().
 """
 
 import sys
-
+from operator import itemgetter, attrgetter
 # +++your code here+++
+
+def count_words(filename):
+    #print '-----------FILE----------'
+    # Echo the contents of a file
+    #print "faccio tutto: ", seleziona
+    dict_foo = {}
+    f = open('foo.txt', 'rU')
+    file_list = f.readlines()
+    for riga in file_list:
+        #print '---', riga,
+        a = riga.split()
+        #print 'parola1 ',a.pop(0),'\n'        
+        for parola in a:
+            p = parola.lower()
+            #print 'parola+ ', parola,
+            if p in dict_foo:
+                dict_foo[p]+=1
+            else:
+                dict_foo[p]=1
+ 
+    f.close()
+    #print 'dizionario: '
+    #for key in sorted(dict_foo.keys(), key=dict_foo.__getitem__, reverse=True):
+    #    print "K:", key, " - ", dict_foo[key] 
+    #for keys in dict_foo:
+    #    print "K:", keys, " - ", dict_foo[keys]
+    #print dict_foo
+    #sys.exit(0)
+    return dict_foo
+    
+    #print '-----------EOF :)--------'
+    return
+
+
+def print_words(filename):
+    a = count_words(filename)
+    print '-----PAROLE IN ORDINE ALFABETICO------ '
+    for k in sorted(a):
+        print k,': ',a[k]
+    #print sorted(a, key=a.__getitem__, reverse=True)[:10]
+    #print a
+    #print 'DIZ',a
+    #for k in b:
+    #    print 'coppieAll: ', k, b[k]
+    #    print k 
+    #print 'sono in words'
+    return
+
+def print_top(filename):
+    a = count_words(filename)
+    #print 'tutti: ', a['tutti']
+    conta=1
+    print '---TOP WORD---'
+    for k in sorted(a,key=a.__getitem__, reverse=True)[:9]:
+        print conta,':',k,a[k]    #a = count_words(filename, 'top')
+        conta+=1
+    #for k in a:
+        #print 'coppieTop: ', k, a[k]
+    #    print k
+    return    
+    
+
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
-
 ###
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
-    sys.exit(1)
-
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print 'unknown option: ' + option
-    sys.exit(1)
-
+    print "------DICT-------"
+    dict = {}
+    dict['a'] = 'alpha'
+    dict['g'] = 'gamma'
+    dict['o'] = 'omega'
+    
+    print dict
+    print"a in dict? ", 'a' in dict #True
+    print"dict[a]? ", dict['a']  #alpha
+    #print"print z", dict['z']  #ERRORE!!!! KeyError --> chiave non trovata nel dizionario
+    print dict.get('z') #SENZA ERRORE None -->chiave non trovata nel dizionario
+    print dict.get('g') #gamma
+    print 'chiavi/keys(): ',dict.keys()
+    print 'valori/values: ',dict.values()
+    print 'items: keys+values di tutto il dict: \n', dict.items()#diverso da 'print dict'...
+    ## By default, iterating over a dict iterates over its keys.
+    ## Note that the keys are in a random order.
+    for key in dict: print 'chiave: ',key
+    ## Exactly the same as above
+    for key in dict.keys(): print key
+    ## Common case -- loop over the keys in sorted order,
+    ## accessing each key/value
+    for key in sorted(dict.keys()):
+        print 'coppia chiave valore:',key, dict[key]
+    ## .items() is the dict expressed as (key, value) tuples
+    print dict.items()  ##  [('a', 'alpha'), ('o', 'omega'), ('g', 'gamma')]    
+    hash = {}
+    hash['word'] = 'garfield'
+    hash['count'] = 42
+    s = 'I want %(count)d copies of %(word)s' % hash  # %d for int, %s for string
+    print s
+    
+    print '------------DEL------------'
+    var = 6
+    del var  # var no more!
+    
+    list = ['a', 'b', 'c', 'd']
+    del list[0]     ## Delete first element
+    del list[-2:]   ## Delete last two elements
+    print list      ## ['b']
+    
+    dict = {'a':1, 'b':2, 'c':3}
+    print dict
+    del dict['b']   ## Delete 'b' entry
+    print dict      ## {'a':1, 'c':3}
+    
+    print '------fine dict----------'
+    #The f.readlines() method reads the whole file into memory and returns its contents as a list of its lines.
+    #The f.read() method reads the whole file into a single string, which
+    #can be a handy way to deal with the text all at once, such as with regular expressions we'll see later.
+    
+    print '-----------FILE----------'
+    # Echo the contents of a file
+    f = open('foo.txt', 'rU')
+    for line in f:   ## iterates over the lines of the file
+        print line,    ## trailing , so print does not add an end-of-line char
+                     ## since 'line' already includes the end-of line.
+    f.close()
+    #sys.exit(0)
+    
+    print '-----------EOF :)--------'
+    
+    if len(sys.argv) != 3:
+        print 'usage: ./wordcount.py {--count | --topcount} file'
+        sys.exit(1)
+    
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print 'unknown option: ' + option
+        sys.exit(1)
+    
 if __name__ == '__main__':
-  main()
+    main()
