@@ -2,6 +2,7 @@
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
 # http://www.apache.org/licenses/LICENSE-2.0
+from __future__ import print_function
 from fileinput import filename
 
 # Google's Python Class
@@ -40,6 +41,7 @@ print_words() and print_top().
 
 import sys
 from operator import itemgetter, attrgetter
+
 # +++your code here+++
 
 def count_words(filename):
@@ -77,9 +79,14 @@ def count_words(filename):
 
 def print_words(filename):
     a = count_words(filename)
-    print '-----PAROLE IN ORDINE ALFABETICO------ '
-    for k in sorted(a):
-        print k,': ',a[k]
+    print ('-----PAROLE IN ORDINE ALFABETICO------ ')
+    #for k in sorted(a):
+    #    print k,': ',a[k]
+    
+    
+    for key in sorted(a.iterkeys()):
+        print (key,':',a[key],sep='')
+ 
     #print sorted(a, key=a.__getitem__, reverse=True)[:10]
     #print a
     #print 'DIZ',a
@@ -93,9 +100,14 @@ def print_top(filename):
     a = count_words(filename)
     #print 'tutti: ', a['tutti']
     conta=1
-    print '---TOP WORD---'
-    for k in sorted(a,key=a.__getitem__, reverse=True)[:9]:
-        print conta,':',k,a[k]    #a = count_words(filename, 'top')
+    print ('---TOP 10 WORD---')
+    #for k in sorted(a,key=a.__getitem__, reverse=True)[:9]:
+    #for k in sorted(a,key=a.__getitem__, reverse=True)[:9]:        
+        #print conta,':',k,a[k]    #a = count_words(filename, 'top')
+        #conta+=1
+        
+    for key, value in sorted(a.iteritems(), key=lambda (k,v): (v,k), reverse=True)[:10]:
+        print (key,':',value,sep='')
         conta+=1
     #for k in a:
         #print 'coppieTop: ', k, a[k]
@@ -112,6 +124,7 @@ def print_top(filename):
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
+    '''  
     print "------DICT-------"
     dict = {}
     dict['a'] = 'alpha'
@@ -173,9 +186,9 @@ def main():
     #sys.exit(0)
     
     print '-----------EOF :)--------'
-    
+    '''
     if len(sys.argv) != 3:
-        print 'usage: ./wordcount.py {--count | --topcount} file'
+        print ('usage: ./wordcount.py {--count | --topcount} file')
         sys.exit(1)
     
     option = sys.argv[1]
@@ -185,7 +198,7 @@ def main():
     elif option == '--topcount':
         print_top(filename)
     else:
-        print 'unknown option: ' + option
+        print ('unknown option: ' + option)
         sys.exit(1)
     
 if __name__ == '__main__':
