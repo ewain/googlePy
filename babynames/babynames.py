@@ -41,6 +41,36 @@ def extract_names(filename):
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
   # +++your code here+++
+  f = open(filename, 'r')
+  htmlMio = f.read()
+  htmlSmall = htmlMio[0:5000]
+  #print htmlMio[:2000]
+  
+  annoTag = re.findall(r'name="year" id="yob" size="4" value="\d\d\d\d', htmlMio,)
+  anno = int(annoTag[0][-4:])
+  print 'anno:',str(anno)
+  
+  nomiTag = re.finditer(r'<tr align="right"><td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>', htmlSmall,)
+  #anno2 = int(annoTag[0][-4:])
+  #print 'nomiTag:', nomiTag
+  dict_nomi={}
+  for match in nomiTag:
+    #print 'match: ',match.span()
+    dict_nomi[match.group(1)]=(match.group(2),match.group(3))
+    for nomi in dict_nomi:
+        print dict_nomi.get(nomi)[0],
+        print dict_nomi.get(nomi)[1]
+    #stringa='pos:'+match.group(1)+' M:'+match.group(2)+' F:'+match.group(3)
+    #sys.stdout.write (str(stringa))
+    #print ''
+    #sys.stdout.flush()
+    #print 'num: ',count
+    #print 'file: ', filename
+  l=[]
+  [l.extend([k,v]) for k,v in dict_nomi.items()]
+  l.insert(0, anno)
+  print l
+  print '-FINE-'
   return
 
 
@@ -63,6 +93,7 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
+  extract_names(args[0])
   
 if __name__ == '__main__':
   main()

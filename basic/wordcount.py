@@ -4,6 +4,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 from __future__ import print_function
 from fileinput import filename
+from re import match
 
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
@@ -38,9 +39,10 @@ Optional: define a helper function to avoid code duplication inside
 print_words() and print_top().
 
 """
-
+import cardinality
 import sys
 from operator import itemgetter, attrgetter
+import re
 
 # +++your code here+++
 
@@ -64,6 +66,30 @@ def count_words(filename):
                 dict_foo[p]=1
  
     f.close()
+    #-----prova re----
+    f = open('foo.txt', 'rU')
+    file_list = f.read()
+    result = re.finditer(r'\nC', file_list,)
+    b = re.finditer(r'\nC', file_list,)
+    #print("cardi: ",cardinality.count(result))
+    print ('result: ' , result)
+    for match in result :
+        print ('ris: ', match.group(0))
+        print ('posizioni: ',match.span())
+        
+    for match in b :
+        print ('ris2: ', match.group(0))
+        print ('posizioni2: ',match.span())
+    f.close()
+    print ('test iterable')
+    iterable = [1, 2] 
+    iterator = iter(iterable)
+    print(iterator.next())
+    print(iterator.next())
+    #se eseguo un altro nex mi da errore perché è finito l'iteratore
+    #print(iterator.next())   
+    print ('test iterable')
+    
     #print 'dizionario: '
     #for key in sorted(dict_foo.keys(), key=dict_foo.__getitem__, reverse=True):
     #    print "K:", key, " - ", dict_foo[key] 
@@ -105,7 +131,6 @@ def print_top(filename):
     #for k in sorted(a,key=a.__getitem__, reverse=True)[:9]:        
         #print conta,':',k,a[k]    #a = count_words(filename, 'top')
         #conta+=1
-        
     for key, value in sorted(a.iteritems(), key=lambda (k,v): (v,k), reverse=True)[:10]:
         print (key,':',value,sep='')
         conta+=1
