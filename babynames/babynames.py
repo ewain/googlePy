@@ -69,7 +69,8 @@ def extract_names(filename):
   l=[]
   [l.extend([k,v]) for k,v in dict_nomi.items()]
   l.insert(0, anno)
-  print l
+  for item in l:
+  print l.pop()
   print '-FINE-'
   return
 
