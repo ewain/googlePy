@@ -11,13 +11,16 @@ import re
 import os
 import shutil
 import commands
+import subprocess
+
 
 """Copy Special exercise
 """
 
 # +++your code here+++
 # Write functions and modify main() to call them
-dictPath = []
+listPath = []
+dictPath ={}
 def get_special_paths(todir):
   print '---------get_special_paths-----------: ', todir
   for fileName in os.listdir(todir):
@@ -25,32 +28,40 @@ def get_special_paths(todir):
     for mat in iteratore:
       trovato = mat.group()
       print os.path.abspath(trovato)
-      dictPath.append(os.path.abspath(trovato))
-  #print 'dictPathIn:', dictPath 
-  return dictPath
+      listPath.append(os.path.abspath(trovato))
+  #print 'listPathIn:', listPath 
+  return listPath
 
 
-def copy_to(paths, dir):
-  print '---------copy_to-----------: ', dir
-  quiDict= get_special_paths('.')
-  print 'quiDict: ', quiDict
-  #srcname = os.path.join(src, '__hello__')
-  #print "srcname: ", srcname
-  #dstname = os.path.join(src, 'ciao')
-  #print 'dstname: ', dstname
-  
-  shutil.copy2('./xyz__hello__.txt','./ciao/tito.txt')
-  
-  for fileName in os.listdir(dir):
-    iteratore = re.finditer(r'__\w*__', fileName)
-    print "files trovati"
+def copy_to(paths, to_dir):
+  print '---------copy_to-----------: ', to_dir
+  if not os.path.exists(to_dir):
+    os.mkdir(to_dir)
+  for fileNames in os.listdir('.'):
+    iteratore = re.finditer(r'__\w*__', fileNames)
+    print 'fileNames:', fileNames
     for mat in iteratore:
-      print mat
-      #trovato = mat.group()
-      #print 'ssss',trovato
-      #shutil.copytree(os.path.abspath(fileName), os.path.abspath(dir))
+      trovato = mat.group()
+      os_path = os.path.abspath(to_dir)    
+      shutil.copy2(fileNames,os_path)
+  #print 'listPathIn:', listPath 
+  print '---------FINE copyTo---------'
+#---------------------------------
+  if not os.path.exists(to_dir):
+    os.mkdir(to_dir)
+  for path in paths:
+    fname = os.path.basename(path)
+    print 'basename: ',fname
+    print'join: ',os.path.join(to_dir, fname)
+    print 'path:', path
+    #shutil.copy(path, os.path.join(to_dir, fname))
+  
   return
-
+def zip_to(path, tozip):
+  print 'toziop: ',tozip
+  subprocess.Popen('notepad.exe c:\aaa.txt')    
+  return
+  
 def main():
   # This basic command line argument parsing code is provided.
   # Add code to call your functions below.
@@ -80,6 +91,7 @@ def main():
   if args[0] == '--tozip':
     tozip = args[1]
     print 'tozip: ', tozip
+    zip_to('.',tozip)
     #del args[0:2]
 
   # +++your code here+++
